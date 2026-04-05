@@ -1,0 +1,353 @@
+/*
+ * Design: SEEC-Inspired Bold Japanese SaaS LP
+ * Color: Royal Blue (#1A5FD4) + Dark Navy (#1A3A8F) + Orange CTA (#F97316) + Light Blue BG (#EFF6FF)
+ * Typography: Noto Sans JP (bold headings) + large watermark text
+ * Layout: 2-col hero (copy + form), bubble problems, white card grid, blue accordion FAQ
+ */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.5rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.15 0.02 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0.02 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0.02 250);
+  --primary: oklch(0.45 0.2 255);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.94 0.04 240);
+  --secondary-foreground: oklch(0.25 0.08 250);
+  --muted: oklch(0.96 0.02 240);
+  --muted-foreground: oklch(0.55 0.05 250);
+  --accent: oklch(0.94 0.04 240);
+  --accent-foreground: oklch(0.25 0.08 250);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.88 0.03 240);
+  --input: oklch(0.88 0.03 240);
+  --ring: oklch(0.45 0.2 255);
+  --chart-1: oklch(0.45 0.2 255);
+  --chart-2: oklch(0.55 0.18 255);
+  --chart-3: oklch(0.65 0.15 255);
+  --chart-4: oklch(0.35 0.22 255);
+  --chart-5: oklch(0.25 0.2 255);
+  --sidebar: oklch(0.96 0.02 240);
+  --sidebar-foreground: oklch(0.15 0.02 250);
+  --sidebar-primary: oklch(0.45 0.2 255);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.94 0.04 240);
+  --sidebar-accent-foreground: oklch(0.25 0.08 250);
+  --sidebar-border: oklch(0.88 0.03 240);
+  --sidebar-ring: oklch(0.45 0.2 255);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Noto Sans JP", sans-serif;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1200px;
+    }
+  }
+
+  /* ===== Navbar ロゴ崩れ防止 ===== */
+  /* スマホでロゴが縮まないよう、ナビバー内のflexアイテムを保護 */
+  header .container > div {
+    overflow: visible;
+  }
+  /* ロゴリンクは絶対に縮まない */
+  header a[href="/"] {
+    flex-shrink: 0 !important;
+    min-width: 0;
+    overflow: visible;
+  }
+  /* ロゴ内のテキストは折り返し禁止 */
+  header a[href="/"] span {
+    white-space: nowrap;
+  }
+
+  /* Primary CTA button - Orange */
+  .btn-orange {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #F97316, #EA580C);
+    color: white;
+    font-weight: 800;
+    font-size: 1rem;
+    border-radius: 9999px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    transition: all 0.2s ease;
+    font-family: "Noto Sans JP", sans-serif;
+    white-space: nowrap;
+  }
+  .btn-orange:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(249, 115, 22, 0.5);
+    background: linear-gradient(135deg, #FB923C, #F97316);
+  }
+
+  /* Secondary CTA button - Green */
+  .btn-green {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #22C55E, #16A34A);
+    color: white;
+    font-weight: 800;
+    font-size: 1rem;
+    border-radius: 9999px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+    transition: all 0.2s ease;
+    font-family: "Noto Sans JP", sans-serif;
+    white-space: nowrap;
+  }
+  .btn-green:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.5);
+  }
+
+  /* Blue button */
+  .btn-blue {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    background: linear-gradient(135deg, #1D4ED8, #2563EB);
+    color: white;
+    font-weight: 800;
+    font-size: 1rem;
+    border-radius: 9999px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
+    transition: all 0.2s ease;
+    font-family: "Noto Sans JP", sans-serif;
+    white-space: nowrap;
+  }
+  .btn-blue:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(29, 78, 216, 0.4);
+  }
+
+  /* Section heading style */
+  .section-heading {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+  @media (min-width: 768px) {
+    .section-heading {
+      margin-bottom: 3rem;
+    }
+  }
+  .section-heading .watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(2.5rem, 8vw, 7rem);
+    font-weight: 900;
+    color: rgba(37, 99, 235, 0.06);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    pointer-events: none;
+    font-family: "Noto Sans JP", sans-serif;
+    z-index: 0;
+  }
+  .section-heading h2 {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(1.25rem, 3.5vw, 2.25rem);
+    font-weight: 900;
+    color: #1E3A8A;
+    font-family: "Noto Sans JP", sans-serif;
+    line-height: 1.3;
+  }
+  .section-heading .subtitle {
+    position: relative;
+    z-index: 1;
+    color: #1D4ED8;
+    font-weight: 700;
+    font-size: clamp(0.7rem, 2vw, 0.875rem);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  /* White card */
+  .feature-card {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.25rem 1rem;
+    box-shadow: 0 2px 15px rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.08);
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  @media (min-width: 640px) {
+    .feature-card {
+      padding: 1.5rem 1.25rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .feature-card {
+      padding: 2rem 1.5rem;
+    }
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.15);
+  }
+
+  /* Blue FAQ accordion */
+  .faq-item {
+    background: #1D4ED8;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+  }
+  .faq-item button {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    color: white;
+    font-weight: 700;
+    font-family: "Noto Sans JP", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  /* Speech bubble */
+  .speech-bubble {
+    background: white;
+    border: 2px solid #BFDBFE;
+    border-radius: 0.75rem;
+    padding: 0.75rem 0.875rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1E3A8A;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+    position: relative;
+  }
+  @media (min-width: 640px) {
+    .speech-bubble {
+      padding: 0.875rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  /* Diagonal accent */
+  .diagonal-accent {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 900;
+    color: #1E3A8A;
+    font-family: "Noto Sans JP", sans-serif;
+  }
+  .diagonal-accent::before,
+  .diagonal-accent::after {
+    content: "\\";
+    color: #F97316;
+    font-size: 1.5em;
+    line-height: 1;
+  }
+  .diagonal-accent::after {
+    content: "/";
+  }
+}
